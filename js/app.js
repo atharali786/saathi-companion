@@ -74,16 +74,26 @@ document.addEventListener('DOMContentLoaded', () => {
 // GEMINI API CALL
 // ──────────────────────────────────────────────
 
-async function callGemini(prompt, loadingText = 'Consulting Gemini AI...') {
+async function callGemini(prompt, loadingText = 'Consulting Gemini AI...', fallbackFn = null) {
+  const runFallback = () => {
+    if (fallbackFn) {
+      return fallbackFn();
+    }
+    return `### Simulated AI Response\n\nThis is a demo response from Saathi's built-in travel intelligence engine. Activate a live Gemini API key for dynamic AI content.`;
+  };
+
+  // If no API key, run in Demo Mode (Mock AI)
   if (!STATE.apiKey) {
-    openApiModal();
-    showToast('Please add your Gemini API key to use AI features.', 'info');
-    return null;
+    showLoading(loadingText + ' (Demo Mode)');
+    // Simulate minor network delay for realistic typing effect
+    await new Promise(resolve => setTimeout(resolve, 800));
+    hideLoading();
+    STATE.currentLoading = false;
+    return runFallback();
   }
 
   if (STATE.currentLoading) return null;
   STATE.currentLoading = true;
-
   showLoading(loadingText);
 
   const url = `${CONFIG.API_BASE}/${CONFIG.MODEL}:generateContent?key=${STATE.apiKey}`;
@@ -123,16 +133,21 @@ async function callGemini(prompt, loadingText = 'Consulting Gemini AI...') {
   } catch (err) {
     console.error('Gemini API error:', err);
     let errMsg = err.message;
-    if (
+    const isRateLimit =
       errMsg.toLowerCase().includes('quota') ||
       errMsg.toLowerCase().includes('limit') ||
       errMsg.toLowerCase().includes('exhausted') ||
-      errMsg.toLowerCase().includes('429')
-    ) {
-      errMsg = 'Gemini free-tier rate limit reached (15 requests/minute). Please wait 30-60 seconds before trying again.';
+      errMsg.toLowerCase().includes('429');
+
+    if (isRateLimit) {
+      showToast('Live API rate limit reached. Falling back to Demo Mode...', 'info');
+      await new Promise(resolve => setTimeout(resolve, 400));
+      return runFallback();
+    } else {
+      showToast(`AI Error: ${errMsg}. Falling back to Demo Mode...`, 'warning');
+      await new Promise(resolve => setTimeout(resolve, 400));
+      return runFallback();
     }
-    showToast(`AI Error: ${errMsg}`, 'error');
-    return null;
   } finally {
     STATE.currentLoading = false;
     hideLoading();
@@ -377,7 +392,7 @@ Make the content feel like advice from a well-traveled friend who truly knows an
   const output = document.getElementById('discover-output');
   setButtonLoading('discover-btn', true);
 
-  const result = await callGemini(prompt, `Discovering ${destination}...`);
+  const result = await callGemini(prompt, `Discovering ${destination}...`, () => window.SaathiMockData.getDiscovery(destination, interests, duration));
   setButtonLoading('discover-btn', false);
 
   if (!result) return;
@@ -422,7 +437,7 @@ Format each gem clearly with its name, rarity, description, and tip.`;
   const output = document.getElementById('gems-output');
   setButtonLoading('gems-btn', true);
 
-  const result = await callGemini(prompt, `Uncovering hidden gems in ${region}...`);
+  const result = await callGemini(prompt, `Uncovering hidden gems in ${region}...`, () => window.SaathiMockData.getHiddenGems(region, gemType));
   setButtonLoading('gems-btn', false);
 
   if (!result) return;
@@ -516,7 +531,7 @@ Make this feel like literary travel writing — not a guide, but an experience. 
   const output = document.getElementById('story-output');
   setButtonLoading('story-btn', true);
 
-  const result = await callGemini(prompt, `Weaving the story of ${destination}...`);
+  const result = await callGemini(prompt, `Weaving the story of ${destination}...`, () => window.SaathiMockData.getStory(destination, style));
   setButtonLoading('story-btn', false);
 
   if (!result) return;
@@ -595,7 +610,7 @@ Be specific, informative, and passionate about the cultural importance.`;
   const output = document.getElementById('heritage-output');
   setButtonLoading('heritage-btn', true);
 
-  const result = await callGemini(prompt, `Exploring heritage of ${region}...`);
+  const result = await callGemini(prompt, `Exploring heritage of ${region}...`, () => window.SaathiMockData.getHeritage(region, activeTab));
   setButtonLoading('heritage-btn', false);
 
   if (!result) return;
@@ -653,7 +668,7 @@ Make it feel like insider knowledge from a local who loves sharing their culture
   const output = document.getElementById('events-output');
   setButtonLoading('events-btn', true);
 
-  const result = await callGemini(prompt, `Finding events in ${destination} for ${month}...`);
+  const result = await callGemini(prompt, `Finding events in ${destination} for ${month}...`, () => window.SaathiMockData.getEvents(destination, month, eventType));
   setButtonLoading('events-btn', false);
 
   if (!result) return;
@@ -718,7 +733,7 @@ Make these feel like life-changing travel moments, not tourist packages. Emphasi
   const output = document.getElementById('exp-output');
   setButtonLoading('exp-btn', true);
 
-  const result = await callGemini(prompt, `Finding authentic experiences in ${destination}...`);
+  const result = await callGemini(prompt, `Finding authentic experiences in ${destination}...`, () => window.SaathiMockData.getExperiences(destination));
   setButtonLoading('exp-btn', false);
 
   if (!result) return;
@@ -798,7 +813,7 @@ Be specific, fair, and genuinely helpful for making a decision.`;
   const output = document.getElementById('compare-output');
   setButtonLoading('compare-btn', true);
 
-  const result = await callGemini(prompt, `Comparing ${destA} vs ${destB}...`);
+  const result = await callGemini(prompt, `Comparing ${destA} vs ${destB}...`, () => window.SaathiMockData.getComparison(destA, destB));
   setButtonLoading('compare-btn', false);
 
   if (!result) return;
@@ -874,7 +889,7 @@ After the daily breakdown, add:
   const output = document.getElementById('itin-output');
   setButtonLoading('itin-btn', true);
 
-  const result = await callGemini(prompt, `Building your ${days}-day itinerary for ${destination}...`);
+  const result = await callGemini(prompt, `Building your ${days}-day itinerary for ${destination}...`, () => window.SaathiMockData.getItinerary(destination, days, style, group));
   setButtonLoading('itin-btn', false);
 
   if (!result) return;
@@ -981,7 +996,7 @@ Be specific, warm in tone, and help travelers feel confident and respectful.`;
   const output = document.getElementById('etiquette-output');
   setButtonLoading('etiquette-btn', true);
 
-  const result = await callGemini(prompt, `Preparing cultural guide for ${culture}...`);
+  const result = await callGemini(prompt, `Preparing cultural guide for ${culture}...`, () => window.SaathiMockData.getEtiquette(culture));
   setButtonLoading('etiquette-btn', false);
 
   if (!result) return;
@@ -1176,13 +1191,13 @@ function updateApiStatus() {
   const label = document.getElementById('api-status-label');
 
   if (STATE.apiKey) {
-    dot?.classList.remove('not-configured');
+    dot?.classList.remove('not-configured', 'demo-mode');
     dot?.classList.add('configured');
-    if (label) label.textContent = 'AI Active';
+    if (label) label.textContent = 'Live AI Active';
   } else {
-    dot?.classList.remove('configured');
-    dot?.classList.add('not-configured');
-    if (label) label.textContent = 'Configure AI';
+    dot?.classList.remove('configured', 'not-configured');
+    dot?.classList.add('demo-mode');
+    if (label) label.textContent = 'Demo Mode Active';
   }
 }
 

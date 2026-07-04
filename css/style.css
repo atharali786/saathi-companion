@@ -1525,6 +1525,7 @@ body {
 
 .api-dot.not-configured { background: #ff6b6b; box-shadow: 0 0 6px #ff6b6b; }
 .api-dot.configured { background: #2ecc71; box-shadow: 0 0 6px #2ecc71; animation: pulse 2s infinite; }
+.api-dot.demo-mode { background: #3498db; box-shadow: 0 0 6px #3498db; animation: pulse 2.5s infinite; }
 
 /* ===== AI LOADING ===== */
 .ai-loading {
