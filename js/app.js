@@ -818,20 +818,27 @@ Be specific, fair, and genuinely helpful for making a decision.`;
 
   if (!result) return;
 
-  output.innerHTML = `<div class="ai-response">
-    <div class="compare-grid">
-      <div class="compare-col">
-        <div class="compare-col-title">🌍 ${destA}</div>
-        ${formatAIResponse(extractDestSection(result, destA))}
+  if (result.includes('|') && result.split('\n').filter(l => l.includes('|')).length > 2) {
+    output.innerHTML = `<div class="ai-response">
+      <h4>⚖️ Side-by-Side Comparison: ${destA} vs ${destB}</h4>
+      ${formatAIResponse(result)}
+    </div>`;
+  } else {
+    output.innerHTML = `<div class="ai-response">
+      <div class="compare-grid">
+        <div class="compare-col">
+          <div class="compare-col-title">🌍 ${destA}</div>
+          ${formatAIResponse(extractDestSection(result, destA))}
+        </div>
+        <div class="compare-col">
+          <div class="compare-col-title">🌍 ${destB}</div>
+          ${formatAIResponse(extractDestSection(result, destB))}
+        </div>
       </div>
-      <div class="compare-col">
-        <div class="compare-col-title">🌍 ${destB}</div>
-        ${formatAIResponse(extractDestSection(result, destB))}
-      </div>
-    </div>
-    <h4>🏆 AI Verdict</h4>
-    ${formatAIResponse(result)}
-  </div>`;
+      <h4>🏆 AI Verdict</h4>
+      ${formatAIResponse(result)}
+    </div>`;
+  }
 
   showToast(`⚖️ Comparison ready!`, 'success');
 }
@@ -1022,19 +1029,58 @@ function formatAIResponse(text) {
   const lines = text.split('\n');
   let html = '';
   let inList = false;
+  let inTable = false;
+  let isTableHeader = true;
 
   lines.forEach(line => {
     const trimmed = line.trim();
     if (!trimmed) {
-      if (inList) {
-        html += '</ul>';
-        inList = false;
-      }
+      if (inList) { html += '</ul>'; inList = false; }
+      if (inTable) { html += '</tbody></table>'; inTable = false; }
       return;
     }
 
     // Remove markdown bold markers for display
     const clean = trimmed.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+    // Markdown Table Row detection
+    if (trimmed.startsWith('|')) {
+      if (inList) { html += '</ul>'; inList = false; }
+      
+      // Skip separator rows (like |:---|:---| or |---|)
+      if (/^[|:\-\s]+$/.test(trimmed)) {
+        return;
+      }
+
+      if (!inTable) {
+        html += '<table class="ai-table"><thead>';
+        inTable = true;
+        isTableHeader = true;
+      }
+
+      const cells = trimmed.split('|').slice(1, -1).map(c => c.trim());
+      html += '<tr>';
+      cells.forEach(cell => {
+        const cleanCell = cell.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>');
+        if (isTableHeader) {
+          html += `<th>${cleanCell}</th>`;
+        } else {
+          html += `<td>${cleanCell}</td>`;
+        }
+      });
+      html += '</tr>';
+
+      if (isTableHeader) {
+        html += '</thead><tbody>';
+        isTableHeader = false;
+      }
+      return;
+    } else {
+      if (inTable) {
+        html += '</tbody></table>';
+        inTable = false;
+      }
+    }
 
     // Heading detection
     if (/^#{1,3}\s/.test(trimmed)) {
@@ -1069,6 +1115,7 @@ function formatAIResponse(text) {
   });
 
   if (inList) html += '</ul>';
+  if (inTable) html += '</tbody></table>';
   return html;
 }
 
