@@ -397,7 +397,7 @@ Make the content feel like advice from a well-traveled friend who truly knows an
 
   if (!result) return;
 
-  output.innerHTML = `<div class="ai-response">${formatAIResponse(result)}</div>`;
+  output.innerHTML = sanitizeHTML(`<div class="ai-response">${formatAIResponse(result)}</div>`);
   showToast(`✦ ${destination} guide ready!`, 'success');
 }
 
@@ -442,7 +442,7 @@ Format each gem clearly with its name, rarity, description, and tip.`;
 
   if (!result) return;
 
-  output.innerHTML = `<div class="ai-response">${formatGemsResponse(result, region)}</div>`;
+  output.innerHTML = sanitizeHTML(`<div class="ai-response">${formatGemsResponse(result, region)}</div>`);
   showToast(`💎 Hidden gems of ${region} uncovered!`, 'success');
 }
 
@@ -536,7 +536,7 @@ Make this feel like literary travel writing — not a guide, but an experience. 
 
   if (!result) return;
 
-  output.innerHTML = `<div class="story-text">${formatStory(result)}</div>`;
+  output.innerHTML = sanitizeHTML(`<div class="story-text">${formatStory(result)}</div>`);
   showToast(`📖 Story of ${destination} ready!`, 'success');
 }
 
@@ -615,7 +615,7 @@ Be specific, informative, and passionate about the cultural importance.`;
 
   if (!result) return;
 
-  output.innerHTML = `<div class="ai-response">${formatAIResponse(result)}</div>`;
+  output.innerHTML = sanitizeHTML(`<div class="ai-response">${formatAIResponse(result)}</div>`);
   showToast(`🏛️ Heritage of ${region} revealed!`, 'success');
 }
 
@@ -673,7 +673,7 @@ Make it feel like insider knowledge from a local who loves sharing their culture
 
   if (!result) return;
 
-  output.innerHTML = `<div class="ai-response">${formatEventsResponse(result, destination, month)}</div>`;
+  output.innerHTML = sanitizeHTML(`<div class="ai-response">${formatEventsResponse(result, destination, month)}</div>`);
   showToast(`🎉 Events in ${destination} found!`, 'success');
 }
 
@@ -738,7 +738,7 @@ Make these feel like life-changing travel moments, not tourist packages. Emphasi
 
   if (!result) return;
 
-  output.innerHTML = `<div class="ai-response">${formatAIResponse(result)}</div>`;
+  output.innerHTML = sanitizeHTML(`<div class="ai-response">${formatAIResponse(result)}</div>`);
   showToast(`🤝 Experiences in ${destination} ready!`, 'success');
 }
 
@@ -819,12 +819,12 @@ Be specific, fair, and genuinely helpful for making a decision.`;
   if (!result) return;
 
   if (result.includes('|') && result.split('\n').filter(l => l.includes('|')).length > 2) {
-    output.innerHTML = `<div class="ai-response">
+    output.innerHTML = sanitizeHTML(`<div class="ai-response">
       <h4>⚖️ Side-by-Side Comparison: ${destA} vs ${destB}</h4>
       ${formatAIResponse(result)}
-    </div>`;
+    </div>`);
   } else {
-    output.innerHTML = `<div class="ai-response">
+    output.innerHTML = sanitizeHTML(`<div class="ai-response">
       <div class="compare-grid">
         <div class="compare-col">
           <div class="compare-col-title">🌍 ${destA}</div>
@@ -837,7 +837,7 @@ Be specific, fair, and genuinely helpful for making a decision.`;
       </div>
       <h4>🏆 AI Verdict</h4>
       ${formatAIResponse(result)}
-    </div>`;
+    </div>`);
   }
 
   showToast(`⚖️ Comparison ready!`, 'success');
@@ -901,7 +901,7 @@ After the daily breakdown, add:
 
   if (!result) return;
 
-  output.innerHTML = `<div class="ai-response">${formatItinerary(result, destination, days)}</div>`;
+  output.innerHTML = sanitizeHTML(`<div class="ai-response">${formatItinerary(result, destination, days)}</div>`);
   showToast(`📋 ${days}-day itinerary for ${destination} ready!`, 'success');
 }
 
@@ -1008,7 +1008,7 @@ Be specific, warm in tone, and help travelers feel confident and respectful.`;
 
   if (!result) return;
 
-  output.innerHTML = `<div class="ai-response">${formatEtiquette(result, culture)}</div>`;
+  output.innerHTML = sanitizeHTML(`<div class="ai-response">${formatEtiquette(result, culture)}</div>`);
   showToast(`🙏 Cultural guide for ${culture} ready!`, 'success');
 }
 
@@ -1017,6 +1017,30 @@ function formatEtiquette(text, culture) {
     <h3>🙏 Cultural Etiquette Guide: ${culture}</h3>
     ${formatAIResponse(text)}
   `;
+}
+
+// ──────────────────────────────────────────────
+// SECURITY SANITIZER (XSS Prevention)
+// ──────────────────────────────────────────────
+
+function sanitizeHTML(html) {
+  const temp = document.createElement('div');
+  temp.innerHTML = html;
+  
+  const tagsToRemove = temp.querySelectorAll('script, iframe, object, embed, link, style, form, input, button');
+  tagsToRemove.forEach(tag => tag.remove());
+  
+  const allElements = temp.querySelectorAll('*');
+  allElements.forEach(el => {
+    for (let i = el.attributes.length - 1; i >= 0; i--) {
+      const attr = el.attributes[i];
+      if (attr.name.toLowerCase().startsWith('on')) {
+        el.removeAttribute(attr.name);
+      }
+    }
+  });
+
+  return temp.innerHTML;
 }
 
 // ──────────────────────────────────────────────

@@ -64,6 +64,7 @@
             class="hero-search-input"
             placeholder="Where do you want to explore? (e.g., Kyoto, Morocco, Patagonia...)"
             autocomplete="off"
+            aria-label="Search destination country or city"
           />
           <button class="search-btn" id="hero-search-btn" onclick="handleHeroSearch()">
             Explore with AI
@@ -267,7 +268,7 @@
 
       <div class="heritage-ai-tool">
         <div class="heritage-input-row">
-          <input type="text" id="heritage-input" class="tool-input heritage-search" placeholder="Enter country or region to explore its heritage..." />
+          <input type="text" id="heritage-input" class="tool-input heritage-search" placeholder="Enter country or region to explore its heritage..." aria-label="Explore heritage by country or region" />
           <button class="ai-generate-btn heritage-btn" id="heritage-btn" onclick="generateHeritageSummary()">
             <span class="btn-icon">🏛️</span> Explore Heritage
           </button>
@@ -324,7 +325,7 @@
               </select>
             </div>
             <div class="input-group">
-              <label class="input-label">🎯 Event Type</label>
+              <label for="events-type" class="input-label">🎯 Event Type</label>
               <select id="events-type" class="tool-select">
                 <option value="all">All Types</option>
                 <option value="festivals">Festivals</option>
@@ -419,12 +420,12 @@
       <div class="compare-tool">
         <div class="compare-inputs">
           <div class="compare-input-box">
-            <span class="compare-label">Destination A</span>
+            <label for="compare-a" class="compare-label">Destination A</label>
             <input type="text" id="compare-a" class="tool-input" placeholder="e.g., Kyoto, Japan" />
           </div>
           <div class="compare-vs">VS</div>
           <div class="compare-input-box">
-            <span class="compare-label">Destination B</span>
+            <label for="compare-b" class="compare-label">Destination B</label>
             <input type="text" id="compare-b" class="tool-input" placeholder="e.g., Prague, Czech Republic" />
           </div>
         </div>
@@ -521,7 +522,7 @@
       </div>
       <div class="etiquette-tool">
         <div class="etiquette-input-row">
-          <input type="text" id="etiquette-input" class="tool-input" placeholder="Enter a country or culture (e.g., Japan, Saudi Arabia, India)..." />
+          <input type="text" id="etiquette-input" class="tool-input" placeholder="Enter a country or culture (e.g., Japan, Saudi Arabia, India)..." aria-label="Enter a country or culture to get cultural etiquette guide" />
           <button class="ai-generate-btn etiquette-btn" id="etiquette-btn" onclick="generateEtiquette()">
             <span class="btn-icon">🙏</span> Get Etiquette Guide
           </button>
@@ -545,11 +546,11 @@
         Saathi uses Google's Gemini AI. Enter your free API key to unlock
         all AI-powered features. Your key is stored locally and never sent to our servers.
       </p>
-      <a href="https://aistudio.google.com/app/apikey" target="_blank" class="get-key-link">
+      <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="get-key-link">
         Get a free API key from Google AI Studio →
       </a>
       <div class="modal-input-wrap">
-        <input type="password" id="api-key-input" class="modal-input" placeholder="Paste your Gemini API key here..." />
+        <input type="password" id="api-key-input" class="modal-input" placeholder="Paste your Gemini API key here..." aria-label="Gemini API key input" />
         <button class="modal-toggle-btn" onclick="toggleKeyVisibility()" id="key-toggle-btn" aria-label="Toggle key visibility">👁️</button>
       </div>
       <div class="modal-actions">
