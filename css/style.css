@@ -208,7 +208,7 @@ body {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: var(--gradient-hero);
+  background: linear-gradient(rgba(8, 11, 20, 0.75), rgba(8, 11, 20, 0.75)), url('../assets/hero_travel_bg.jpg') no-repeat center center/cover;
   padding-top: var(--nav-height);
 }
 
@@ -947,7 +947,11 @@ body {
   inset: 0;
   background-image:
     radial-gradient(circle at 20% 30%, rgba(108, 99, 255, 0.06) 0%, transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(244, 167, 50, 0.04) 0%, transparent 40%);
+    radial-gradient(circle at 80% 70%, rgba(244, 167, 50, 0.04) 0%, transparent 40%),
+    linear-gradient(rgba(10, 14, 26, 0.94), rgba(10, 14, 26, 0.94)),
+    url('../assets/culture_pattern.jpg');
+  background-size: auto, auto, auto, 400px;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat;
   pointer-events: none;
 }
 
