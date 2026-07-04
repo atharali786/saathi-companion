@@ -122,7 +122,16 @@ async function callGemini(prompt, loadingText = 'Consulting Gemini AI...') {
     return text;
   } catch (err) {
     console.error('Gemini API error:', err);
-    showToast(`AI Error: ${err.message}`, 'error');
+    let errMsg = err.message;
+    if (
+      errMsg.toLowerCase().includes('quota') ||
+      errMsg.toLowerCase().includes('limit') ||
+      errMsg.toLowerCase().includes('exhausted') ||
+      errMsg.toLowerCase().includes('429')
+    ) {
+      errMsg = 'Gemini free-tier rate limit reached (15 requests/minute). Please wait 30-60 seconds before trying again.';
+    }
+    showToast(`AI Error: ${errMsg}`, 'error');
     return null;
   } finally {
     STATE.currentLoading = false;
