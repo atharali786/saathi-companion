@@ -1,0 +1,12 @@
+{
+  "name": "saathi-companion",
+  "version": "1.0.0",
+  "description": "Saathi: Your traveller Companion - GenAI travel platform",
+  "main": "app.js",
+  "scripts": {
+    "deploy": "netlify deploy --prod --dir=."
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.37.2"
+  }
+}
