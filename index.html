@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saathi: Your traveller Companion – Discover the World, Feel the Culture</title>
+  <meta name="description" content="Saathi is a GenAI-powered travel companion platform that helps you discover destinations, uncover hidden gems, explore local culture, and connect with authentic experiences worldwide." />
+  <meta name="keywords" content="travel, culture, destinations, hidden gems, AI travel, cultural experiences, heritage, local events" />
+  <meta property="og:title" content="Saathi: Your traveller Companion – Discover the World, Feel the Culture" />
+  <meta property="og:description" content="GenAI-powered destination discovery and cultural experience platform." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav id="navbar" class="navbar">
+    <div class="nav-container">
+      <a href="#hero" class="nav-logo" id="nav-logo-link">
+        <span class="logo-icon">🌍</span>
+        <span class="logo-text">Saathi</span>
+      </a>
+      <div class="nav-links" id="nav-links">
+        <a href="#discover" class="nav-link">Discover</a>
+        <a href="#hidden-gems" class="nav-link">Hidden Gems</a>
+        <a href="#storytelling" class="nav-link">Stories</a>
+        <a href="#heritage" class="nav-link">Heritage</a>
+        <a href="#events" class="nav-link">Events</a>
+        <a href="#experiences" class="nav-link">Experiences</a>
+      </div>
+      <button class="nav-cta" id="nav-cta-btn" onclick="scrollToSection('discover')">Start Exploring</button>
+      <button class="hamburger" id="hamburger-btn" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section id="hero" class="hero">
+    <div class="hero-particles" id="hero-particles"></div>
+    <div class="hero-bg-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        <span>Powered by Google Gemini AI</span>
+      </div>
+      <h1 class="hero-title">
+        Discover the World,<br />
+        <em>Feel the Culture</em>
+      </h1>
+      <p class="hero-subtitle">
+        Let AI be your cultural compass — uncover hidden gems, hear ancient stories,
+        find local festivals, and connect with authentic experiences across every corner of the globe.
+      </p>
+      <div class="hero-search-wrapper">
+        <div class="hero-search-box" id="hero-search-box">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            id="hero-search-input"
+            class="hero-search-input"
+            placeholder="Where do you want to explore? (e.g., Kyoto, Morocco, Patagonia...)"
+            autocomplete="off"
+          />
+          <button class="search-btn" id="hero-search-btn" onclick="handleHeroSearch()">
+            Explore with AI
+          </button>
+        </div>
+        <div class="hero-suggestions" id="hero-suggestions"></div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-num">195+</span>
+          <span class="stat-label">Countries</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num">10K+</span>
+          <span class="stat-label">Hidden Gems</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num">50K+</span>
+          <span class="stat-label">Cultural Stories</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num">AI</span>
+          <span class="stat-label">Powered</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>Scroll to discover</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- QUICK DESTINATION CARDS -->
+  <section class="popular-destinations" id="popular-destinations">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-tag">Trending Now</span>
+        <h2 class="section-title">Popular Destinations</h2>
+        <p class="section-subtitle">Click any destination to instantly unlock AI-powered cultural insights</p>
+      </div>
+      <div class="dest-cards-grid" id="dest-cards-grid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- AI DESTINATION DISCOVERY -->
+  <section id="discover" class="feature-section discover-section">
+    <div class="section-container">
+      <div class="feature-header">
+        <div class="feature-icon-wrap">🗺️</div>
+        <span class="section-tag">AI-Powered</span>
+        <h2 class="section-title">Destination Discovery</h2>
+        <p class="section-subtitle">
+          Enter any destination and our GenAI engine instantly surfaces must-visit places,
+          local insider tips, best travel seasons, and cultural highlights.
+        </p>
+      </div>
+      <div class="ai-tool-card" id="discover-tool">
+        <div class="tool-input-area">
+          <div class="input-group">
+            <label for="discover-input" class="input-label">🌐 Destination</label>
+            <input type="text" id="discover-input" class="tool-input" placeholder="e.g., Istanbul, Turkey" />
+          </div>
+          <div class="input-group">
+            <label for="discover-interests" class="input-label">✨ Your Interests (optional)</label>
+            <input type="text" id="discover-interests" class="tool-input" placeholder="e.g., history, food, art, nature, adventure" />
+          </div>
+          <div class="input-group">
+            <label for="discover-duration" class="input-label">📅 Trip Duration</label>
+            <select id="discover-duration" class="tool-select">
+              <option value="weekend">Weekend (2-3 days)</option>
+              <option value="week" selected>1 Week</option>
+              <option value="twoweeks">2 Weeks</option>
+              <option value="month">1 Month</option>
+            </select>
+          </div>
+          <button class="ai-generate-btn" id="discover-btn" onclick="generateDestinationDiscovery()">
+            <span class="btn-icon">✦</span> Discover with AI
+          </button>
+        </div>
+        <div class="tool-output-area" id="discover-output">
+          <div class="output-placeholder">
+            <div class="placeholder-icon">🗺️</div>
+            <p>Your AI-powered destination guide will appear here</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIDDEN GEMS FINDER -->
+  <section id="hidden-gems" class="feature-section gems-section">
+    <div class="section-container">
+      <div class="feature-header">
+        <div class="feature-icon-wrap">💎</div>
+        <span class="section-tag">Exclusive Discovery</span>
+        <h2 class="section-title">Hidden Gems Finder</h2>
+        <p class="section-subtitle">
+          Go beyond the tourist trail. Our AI reveals secret spots, local haunts, and
+          undiscovered wonders that most travelers never find.
+        </p>
+      </div>
+      <div class="ai-tool-card gems-card" id="gems-tool">
+        <div class="tool-input-area">
+          <div class="input-group">
+            <label for="gems-input" class="input-label">📍 Region or Country</label>
+            <input type="text" id="gems-input" class="tool-input" placeholder="e.g., Rajasthan, India" />
+          </div>
+          <div class="gems-filters">
+            <span class="filter-label">Type of hidden gem:</span>
+            <div class="filter-chips" id="gem-type-chips">
+              <button class="filter-chip active" data-value="all" onclick="toggleChip(this, 'gem-type-chips')">All</button>
+              <button class="filter-chip" data-value="nature" onclick="toggleChip(this, 'gem-type-chips')">🌿 Nature</button>
+              <button class="filter-chip" data-value="village" onclick="toggleChip(this, 'gem-type-chips')">🏘️ Villages</button>
+              <button class="filter-chip" data-value="ruins" onclick="toggleChip(this, 'gem-type-chips')">🏛️ Ancient Ruins</button>
+              <button class="filter-chip" data-value="food" onclick="toggleChip(this, 'gem-type-chips')">🍜 Food Spots</button>
+              <button class="filter-chip" data-value="art" onclick="toggleChip(this, 'gem-type-chips')">🎨 Art & Craft</button>
+            </div>
+          </div>
+          <button class="ai-generate-btn gems-btn" id="gems-btn" onclick="generateHiddenGems()">
+            <span class="btn-icon">💎</span> Uncover Hidden Gems
+          </button>
+        </div>
+        <div class="tool-output-area" id="gems-output">
+          <div class="output-placeholder">
+            <div class="placeholder-icon">💎</div>
+            <p>Your secret discoveries await...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMMERSIVE STORYTELLING -->
+  <section id="storytelling" class="feature-section story-section">
+    <div class="story-bg-pattern"></div>
+    <div class="section-container">
+      <div class="feature-header">
+        <div class="feature-icon-wrap">📖</div>
+        <span class="section-tag">AI Storytelling</span>
+        <h2 class="section-title">Immersive Cultural Stories</h2>
+        <p class="section-subtitle">
+          Experience destinations through captivating AI-generated narratives —
+          legends, history, folklore, and the living spirit of every place.
+        </p>
+      </div>
+      <div class="story-tool-wrapper">
+        <div class="story-input-card">
+          <div class="input-group">
+            <label for="story-destination" class="input-label">🌍 Choose a Destination</label>
+            <input type="text" id="story-destination" class="tool-input" placeholder="e.g., Varanasi, Egypt, Athens..." />
+          </div>
+          <div class="input-group">
+            <label class="input-label">📚 Story Style</label>
+            <div class="style-selector" id="story-style-selector">
+              <button class="style-btn active" data-style="epic" onclick="selectStyle(this)">⚔️ Epic History</button>
+              <button class="style-btn" data-style="mystical" onclick="selectStyle(this)">✨ Mystical Legends</button>
+              <button class="style-btn" data-style="cultural" onclick="selectStyle(this)">🎭 Cultural Journey</button>
+              <button class="style-btn" data-style="foodie" onclick="selectStyle(this)">🍽️ Culinary Tales</button>
+            </div>
+          </div>
+          <button class="ai-generate-btn story-btn" id="story-btn" onclick="generateStory()">
+            <span class="btn-icon">📖</span> Generate Story
+          </button>
+        </div>
+        <div class="story-display-card" id="story-output">
+          <div class="output-placeholder">
+            <div class="placeholder-icon">📖</div>
+            <p>Your immersive cultural story will come alive here...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HERITAGE SPOTLIGHT -->
+  <section id="heritage" class="feature-section heritage-section">
+    <div class="section-container">
+      <div class="feature-header">
+        <div class="feature-icon-wrap">🏛️</div>
+        <span class="section-tag">Cultural Heritage</span>
+        <h2 class="section-title">Heritage & Traditions Spotlight</h2>
+        <p class="section-subtitle">
+          Deep-dive into UNESCO sites, ancient traditions, indigenous art forms,
+          and the living heritage that defines every culture.
+        </p>
+      </div>
+
+      <!-- Heritage Showcase Tabs -->
+      <div class="heritage-tabs" id="heritage-tabs">
+        <button class="heritage-tab active" data-tab="sites" onclick="switchHeritageTab(this)">🏛️ UNESCO Sites</button>
+        <button class="heritage-tab" data-tab="traditions" onclick="switchHeritageTab(this)">🎎 Traditions</button>
+        <button class="heritage-tab" data-tab="art" onclick="switchHeritageTab(this)">🎨 Art & Craft</button>
+        <button class="heritage-tab" data-tab="cuisine" onclick="switchHeritageTab(this)">🍛 Cuisine</button>
+        <button class="heritage-tab" data-tab="music" onclick="switchHeritageTab(this)">🎵 Music & Dance</button>
+      </div>
+
+      <div class="heritage-ai-tool">
+        <div class="heritage-input-row">
+          <input type="text" id="heritage-input" class="tool-input heritage-search" placeholder="Enter country or region to explore its heritage..." />
+          <button class="ai-generate-btn heritage-btn" id="heritage-btn" onclick="generateHeritageSummary()">
+            <span class="btn-icon">🏛️</span> Explore Heritage
+          </button>
+        </div>
+        <div class="heritage-output" id="heritage-output">
+          <div class="output-placeholder">
+            <div class="placeholder-icon">🏛️</div>
+            <p>Discover the rich heritage of any destination...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Static Heritage Feature Cards -->
+      <div class="heritage-highlights" id="heritage-highlights">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCAL EVENTS & ACTIVITIES -->
+  <section id="events" class="feature-section events-section">
+    <div class="section-container">
+      <div class="feature-header">
+        <div class="feature-icon-wrap">🎉</div>
+        <span class="section-tag">Live Culture</span>
+        <h2 class="section-title">Local Events & Activities</h2>
+        <p class="section-subtitle">
+          Never miss a festival, market, or cultural celebration. AI suggests the perfect
+          local experiences for your destination and travel dates.
+        </p>
+      </div>
+      <div class="ai-tool-card events-card" id="events-tool">
+        <div class="tool-input-area">
+          <div class="input-group">
+            <label for="events-destination" class="input-label">📍 Destination</label>
+            <input type="text" id="events-destination" class="tool-input" placeholder="e.g., Rio de Janeiro, Brazil" />
+          </div>
+          <div class="input-row">
+            <div class="input-group">
+              <label for="events-month" class="input-label">📅 Travel Month</label>
+              <select id="events-month" class="tool-select">
+                <option value="January">January</option>
+                <option value="February">February</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
+                <option value="May">May</option>
+                <option value="June">June</option>
+                <option value="July" selected>July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label class="input-label">🎯 Event Type</label>
+              <select id="events-type" class="tool-select">
+                <option value="all">All Types</option>
+                <option value="festivals">Festivals</option>
+                <option value="markets">Local Markets</option>
+                <option value="workshops">Workshops</option>
+                <option value="performances">Performances</option>
+                <option value="sports">Sports & Adventure</option>
+              </select>
+            </div>
+          </div>
+          <button class="ai-generate-btn events-btn" id="events-btn" onclick="generateLocalEvents()">
+            <span class="btn-icon">🎉</span> Find Local Events
+          </button>
+        </div>
+        <div class="tool-output-area" id="events-output">
+          <div class="output-placeholder">
+            <div class="placeholder-icon">🎉</div>
+            <p>Your local events and activity guide will appear here...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUTHENTIC EXPERIENCES -->
+  <section id="experiences" class="feature-section experiences-section">
+    <div class="section-container">
+      <div class="feature-header">
+        <div class="feature-icon-wrap">🤝</div>
+        <span class="section-tag">Connect & Immerse</span>
+        <h2 class="section-title">Authentic Cultural Experiences</h2>
+        <p class="section-subtitle">
+          Go deeper than tourism. Connect with locals, learn traditional crafts,
+          share meals, and live the culture from the inside out.
+        </p>
+      </div>
+      <div class="experiences-layout">
+        <div class="exp-input-panel">
+          <div class="input-group">
+            <label for="exp-destination" class="input-label">📍 Destination</label>
+            <input type="text" id="exp-destination" class="tool-input" placeholder="e.g., Oaxaca, Mexico" />
+          </div>
+          <div class="input-group">
+            <label class="input-label">🧭 Experience Types</label>
+            <div class="filter-chips" id="exp-type-chips">
+              <button class="filter-chip active" data-value="all" onclick="toggleChip(this, 'exp-type-chips')">All</button>
+              <button class="filter-chip" data-value="cooking" onclick="toggleChip(this, 'exp-type-chips')">🍳 Cooking Classes</button>
+              <button class="filter-chip" data-value="homestay" onclick="toggleChip(this, 'exp-type-chips')">🏡 Homestays</button>
+              <button class="filter-chip" data-value="craft" onclick="toggleChip(this, 'exp-type-chips')">🧶 Craft Workshops</button>
+              <button class="filter-chip" data-value="walk" onclick="toggleChip(this, 'exp-type-chips')">🚶 Cultural Walks</button>
+              <button class="filter-chip" data-value="ceremony" onclick="toggleChip(this, 'exp-type-chips')">🙏 Ceremonies</button>
+              <button class="filter-chip" data-value="music" onclick="toggleChip(this, 'exp-type-chips')">🥁 Music Lessons</button>
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="exp-budget" class="input-label">💰 Budget Level</label>
+            <div class="budget-slider-wrap">
+              <input type="range" id="exp-budget" class="budget-slider" min="1" max="3" value="2" step="1" oninput="updateBudgetLabel(this.value)" />
+              <div class="budget-labels">
+                <span>Budget</span>
+                <span id="budget-label">Mid-Range</span>
+                <span>Luxury</span>
+              </div>
+            </div>
+          </div>
+          <button class="ai-generate-btn exp-btn" id="exp-btn" onclick="generateAuthenticExperiences()">
+            <span class="btn-icon">🤝</span> Find Experiences
+          </button>
+        </div>
+        <div class="exp-output-panel" id="exp-output">
+          <div class="output-placeholder">
+            <div class="placeholder-icon">🤝</div>
+            <p>Authentic local experiences await you...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CULTURAL COMPARISON TOOL -->
+  <section id="compare" class="feature-section compare-section">
+    <div class="section-container">
+      <div class="feature-header">
+        <div class="feature-icon-wrap">⚖️</div>
+        <span class="section-tag">AI Comparison</span>
+        <h2 class="section-title">Compare Destinations</h2>
+        <p class="section-subtitle">
+          Can't decide between two destinations? Let AI compare them side-by-side
+          across culture, cost, climate, food, and experiences.
+        </p>
+      </div>
+      <div class="compare-tool">
+        <div class="compare-inputs">
+          <div class="compare-input-box">
+            <span class="compare-label">Destination A</span>
+            <input type="text" id="compare-a" class="tool-input" placeholder="e.g., Kyoto, Japan" />
+          </div>
+          <div class="compare-vs">VS</div>
+          <div class="compare-input-box">
+            <span class="compare-label">Destination B</span>
+            <input type="text" id="compare-b" class="tool-input" placeholder="e.g., Prague, Czech Republic" />
+          </div>
+        </div>
+        <button class="ai-generate-btn compare-btn" id="compare-btn" onclick="generateComparison()">
+          <span class="btn-icon">⚖️</span> Compare with AI
+        </button>
+        <div class="compare-output" id="compare-output">
+          <div class="output-placeholder">
+            <div class="placeholder-icon">⚖️</div>
+            <p>Your side-by-side cultural comparison will appear here...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRAVEL ITINERARY GENERATOR -->
+  <section id="itinerary" class="feature-section itinerary-section">
+    <div class="section-container">
+      <div class="feature-header">
+        <div class="feature-icon-wrap">📋</div>
+        <span class="section-tag">AI Trip Planner</span>
+        <h2 class="section-title">Cultural Itinerary Builder</h2>
+        <p class="section-subtitle">
+          Get a day-by-day AI-crafted itinerary that balances must-see attractions
+          with hidden gems and authentic cultural experiences.
+        </p>
+      </div>
+      <div class="itinerary-tool">
+        <div class="itinerary-inputs">
+          <div class="input-row">
+            <div class="input-group">
+              <label for="itin-dest" class="input-label">🌍 Destination</label>
+              <input type="text" id="itin-dest" class="tool-input" placeholder="e.g., Morocco" />
+            </div>
+            <div class="input-group">
+              <label for="itin-days" class="input-label">📅 Number of Days</label>
+              <select id="itin-days" class="tool-select">
+                <option value="3">3 Days</option>
+                <option value="5">5 Days</option>
+                <option value="7" selected>7 Days</option>
+                <option value="10">10 Days</option>
+                <option value="14">14 Days</option>
+              </select>
+            </div>
+          </div>
+          <div class="input-row">
+            <div class="input-group">
+              <label for="itin-style" class="input-label">🎯 Travel Style</label>
+              <select id="itin-style" class="tool-select">
+                <option value="cultural">Cultural Immersion</option>
+                <option value="adventure">Adventure & Nature</option>
+                <option value="food">Food & Culinary</option>
+                <option value="history">History & Heritage</option>
+                <option value="luxury">Luxury & Comfort</option>
+                <option value="budget">Budget Backpacker</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label for="itin-group" class="input-label">👥 Travel Group</label>
+              <select id="itin-group" class="tool-select">
+                <option value="solo">Solo Traveler</option>
+                <option value="couple">Couple</option>
+                <option value="family">Family with Kids</option>
+                <option value="friends">Friends Group</option>
+              </select>
+            </div>
+          </div>
+          <button class="ai-generate-btn itinerary-btn" id="itin-btn" onclick="generateItinerary()">
+            <span class="btn-icon">📋</span> Build My Itinerary
+          </button>
+        </div>
+        <div class="itinerary-output" id="itin-output">
+          <div class="output-placeholder">
+            <div class="placeholder-icon">📋</div>
+            <p>Your personalized cultural itinerary will be crafted here...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CULTURAL ETIQUETTE GUIDE -->
+  <section id="etiquette" class="feature-section etiquette-section">
+    <div class="section-container">
+      <div class="feature-header">
+        <div class="feature-icon-wrap">🙏</div>
+        <span class="section-tag">Travel Smart</span>
+        <h2 class="section-title">Cultural Etiquette Guide</h2>
+        <p class="section-subtitle">
+          Travel respectfully. AI generates essential cultural dos and don'ts,
+          language tips, dress codes, and local customs for every destination.
+        </p>
+      </div>
+      <div class="etiquette-tool">
+        <div class="etiquette-input-row">
+          <input type="text" id="etiquette-input" class="tool-input" placeholder="Enter a country or culture (e.g., Japan, Saudi Arabia, India)..." />
+          <button class="ai-generate-btn etiquette-btn" id="etiquette-btn" onclick="generateEtiquette()">
+            <span class="btn-icon">🙏</span> Get Etiquette Guide
+          </button>
+        </div>
+        <div class="etiquette-output" id="etiquette-output">
+          <div class="output-placeholder">
+            <div class="placeholder-icon">🙏</div>
+            <p>Cultural etiquette and travel tips will appear here...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- API KEY MODAL -->
+  <div class="modal-overlay" id="api-modal" style="display:none;">
+    <div class="modal-card">
+      <div class="modal-icon">🔑</div>
+      <h3 class="modal-title">Enter Your Gemini API Key</h3>
+      <p class="modal-desc">
+        Saathi uses Google's Gemini AI. Enter your free API key to unlock
+        all AI-powered features. Your key is stored locally and never sent to our servers.
+      </p>
+      <a href="https://aistudio.google.com/app/apikey" target="_blank" class="get-key-link">
+        Get a free API key from Google AI Studio →
+      </a>
+      <div class="modal-input-wrap">
+        <input type="password" id="api-key-input" class="modal-input" placeholder="Paste your Gemini API key here..." />
+        <button class="modal-toggle-btn" onclick="toggleKeyVisibility()" id="key-toggle-btn" aria-label="Toggle key visibility">👁️</button>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-save-btn" onclick="saveApiKey()">Save & Activate</button>
+        <button class="modal-close-btn" onclick="closeApiModal()">Maybe Later</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATIONS -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- API KEY INDICATOR -->
+  <div class="api-status" id="api-status" onclick="openApiModal()" title="Click to configure API key">
+    <span id="api-status-dot" class="api-dot not-configured"></span>
+    <span id="api-status-label">Configure AI</span>
+  </div>
+
+  <!-- LOADING OVERLAY -->
+  <div class="ai-loading" id="ai-loading" style="display:none;">
+    <div class="loading-content">
+      <div class="loading-orb"></div>
+      <p class="loading-text" id="loading-text">Consulting Gemini AI...</p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <span class="logo-icon">🌍</span>
+        <span class="logo-text">Saathi</span>
+        <p class="footer-tagline">Your traveller Companion · Powered by Google Gemini AI</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <a href="#discover">Destinations</a>
+          <a href="#hidden-gems">Hidden Gems</a>
+          <a href="#storytelling">Stories</a>
+          <a href="#heritage">Heritage</a>
+        </div>
+        <div class="footer-col">
+          <h4>Experience</h4>
+          <a href="#events">Local Events</a>
+          <a href="#experiences">Authentic Experiences</a>
+          <a href="#compare">Compare Destinations</a>
+          <a href="#itinerary">Trip Planner</a>
+        </div>
+        <div class="footer-col">
+          <h4>Travel Smart</h4>
+          <a href="#etiquette">Cultural Etiquette</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Saathi · Your traveller Companion · All AI responses generated by Google Gemini</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

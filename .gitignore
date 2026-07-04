@@ -1,0 +1,5 @@
+# Saathi Traveller Companion
+.agents/
+.DS_Store
+*.log
+Thumbs.db
